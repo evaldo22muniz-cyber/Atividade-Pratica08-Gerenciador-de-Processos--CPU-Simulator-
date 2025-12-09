@@ -1,0 +1,55 @@
+class Processo:
+    def __init__(self, nome, prioridade):
+        self.nome = nome
+        self.prioridade = prioridade
+
+    def __repr__(self):
+        return f"{self.nome} (Prioridade: {self.prioridade})"
+
+
+class FilaPrioridade:
+    def __init__(self):
+        self.processos = []
+
+    def adicionar(self, processo):
+        """Adiciona processo e reordena a fila para manter o maior primeiro."""
+        self.processos.append(processo)
+        self.processos.sort(key=lambda p: p.prioridade, reverse=True)
+
+    def remover(self):
+        """Remove o processo de maior prioridade (início da lista)."""
+        if self.vazia():
+            return None
+        return self.processos.pop(0)
+
+    def vazia(self):
+        return len(self.processos) == 0
+
+    def __repr__(self):
+        return str(self.processos)
+
+
+# --- Simulação da CPU ---
+import time
+
+# Criando a fila
+fila = FilaPrioridade()
+
+# Adicionando processos
+fila.adicionar(Processo("Backup do Sistema", 10))  # Alta prioridade
+fila.adicionar(Processo("Atualizar Tela", 3))      # Baixa prioridade
+fila.adicionar(Processo("Salvar Arquivo", 5))
+fila.adicionar(Processo("Gerenciar Memória", 8))   # Prioridade intermediária
+
+print("Fila inicial de processos:")
+print(fila)
+
+print("\n--- INICIANDO EXECUÇÃO DA CPU ---\n")
+
+# Loop simulando execução até fila ficar vazia
+while not fila.vazia():
+    processo = fila.remover()
+    print(f"Executando: {processo}")
+    time.sleep(1)  # pausa simbólica
+
+print("\nTodos os processos foram executados!")
